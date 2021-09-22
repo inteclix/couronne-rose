@@ -1,15 +1,16 @@
 import React from "react";
 import couronneRoseImg from "./couronne_rose.png";
 import productImg from "./product.png";
-import product01Img from "./product01.png";
-import product02Img from "./product02.png";
-import product03Img from "./product03.png";
+import product01 from "./product01.png";
+import product02 from "./product02.png";
+import product03 from "./product03.png";
 import cercleImg from "./cercle.png";
 import styled from "@emotion/styled";
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDy6l1P5H1jB5narxoHXXIsxwpRuvmbtXk",
   authDomain: "couronne-rose.firebaseapp.com",
@@ -25,6 +26,12 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
+const imgs = {
+  product01,
+  product02,
+  product03
+};
+
 const RootStyled = styled.div`
   background: rgb(208, 207, 212);
   background: linear-gradient(
@@ -36,7 +43,6 @@ const RootStyled = styled.div`
   user-select: none;
   overflow-y: scroll;
   .title {
-    margin-top: 10px;
     padding: 10;
     align-items: center;
     justify-content: center;
@@ -46,6 +52,7 @@ const RootStyled = styled.div`
   }
   @media only screen and (max-width: 800px) {
     .title {
+      margin-top: 10px;
       img {
         width: 80%;
       }
@@ -55,6 +62,7 @@ const RootStyled = styled.div`
 
 export default () => {
   const [firebaseProducts, setfirebaseProducts] = React.useState([]);
+
   async function getProducts() {
     const querySnapshot = await getDocs(collection(db, "products"));
     let productsDocs = [];
@@ -64,33 +72,31 @@ export default () => {
     setfirebaseProducts(productsDocs);
   }
 
-  React.useEffect(getProducts, []);
-  const products = [
-    {
-      name: "product name",
-      img: product01Img,
-      dons: 60
-    },
-    {
-      name: "product name",
-      img: product02Img,
-      dons: 57
-    },
-    {
-      name: "product name",
-      img: product03Img,
-      dons: 20
-    }
-  ];
-  let totalDons = 0;
-  products.forEach((p) => (totalDons += p.dons));
-  if (products.length == 0) {
-    return <div>Loading ...</div>;
+  React.useEffect(() => {
+    getProducts();
+  }, []);
+
+  if (firebaseProducts.length == 0) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <img width="70%" src={couronneRoseImg} alt="img" />
+        <div syle={{ fontSize: 20, fontWeight: 700 }}>Loading ...</div>
+      </div>
+    );
   }
+
+  let totalDons = 0;
+  firebaseProducts.forEach((p) => (totalDons += p.dons));
   return (
     <RootStyled>
       <div className="title">
-        <img src={couronneRoseImg} />
+        <img src={couronneRoseImg} alt="img" />
       </div>
       <div style={{ padding: 5 }}>
         <div style={{ fontSize: 24, textAlign: "center", fontWeight: 700 }}>
@@ -102,7 +108,7 @@ export default () => {
             alignItems: "center"
           }}
         >
-          {products.map((p, index) => (
+          {firebaseProducts.map((p, index) => (
             <Don totalDons={totalDons} product={p} />
           ))}
         </div>
@@ -204,7 +210,11 @@ const Don = ({ product, totalDons }) => {
   return (
     <DonStyle>
       <div>
-        <img style={{ width: 120, marginRight: 20 }} src={product.img} />
+        <img
+          style={{ width: 120, marginRight: 20 }}
+          src={imgs[product.img]}
+          alt="img"
+        />
       </div>
       <div style={{ marginRight: 20 }}>
         <DonProgressBar dons={product.dons} totalDons={totalDons} />
@@ -252,7 +262,7 @@ const DonProgressBar = ({ dons, totalDons }) => {
   return (
     <DonProgressBarStyled>
       <div className="cercle" style={{ left: `${(dons / totalDons) * 100}%` }}>
-        <img src={cercleImg} />
+        <img src={cercleImg} alt="img" />
       </div>
     </DonProgressBarStyled>
   );
