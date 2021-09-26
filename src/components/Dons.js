@@ -9,6 +9,8 @@ import giftBoxImg from "imgs/giftbox.png";
 import checkImg from "imgs/check.png";
 import cercleImg from "imgs/cercle.png";
 
+import Button from "./Button"
+
 const imgs = {
   product01,
   product02,
@@ -16,7 +18,7 @@ const imgs = {
 };
 
 const DonsStyled = styled.div`
-  padding: 5px;
+  padding: 50px;
 `;
 export default ({
   selectedProduct,
@@ -25,10 +27,7 @@ export default ({
   products,
   onChooseProduct,
 }) => {
-  let totalDons = 0;
-  products.forEach((p) => {
-    totalDons += p.dons;
-  });
+  let totalDons = 10000
   if (loading) {
     // return <div>...loading</div>;
   }
@@ -50,9 +49,8 @@ export default ({
 
 const DonStyled = styled.div`
   flex-direction: row;
-  @media only screen and (max-width: 800px) {
-    flex-direction: column;
-  }
+  width: 100%;
+  align-self: center;
   align-items: center;
   .product {
     position: relative;
@@ -68,6 +66,12 @@ const DonStyled = styled.div`
         height: 24px;
       }
     }
+  }
+  @media only screen and (max-width: 800px) {
+    flex-direction: column;
+    width: 100%;
+    background-color: red;
+    height: 320px;
   }
 `;
 
@@ -92,53 +96,17 @@ const Don = ({
         </div>
       </div>
       <DonProgressBar dons={product.dons} totalDons={totalDons} />
-      <DonButton
-        onClick={() => onChooseProduct(product)}
+      <Button
+        onClick={() => product.dons !== 10000 && onChooseProduct(product)}
         selected={selectedProduct && selectedProduct.name == product.name}
+        disabled={product.dons == 10000}
       >
         Je Fais un Don <img className="imgButton" src={checkImg} />
-      </DonButton>
+      </Button>
     </DonStyled>
   );
 };
 
-const DonButton = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  background: linear-gradient(
-    90deg,
-    rgba(1, 164, 221, 1) 22%,
-    rgba(44, 51, 131, 1) 100%
-  );
-  margin-left: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  min-width: 100px;
-  color: white;
-  font-weight: 700;
-  border-radius: 16px;
-  height: 16px;
-  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
-  .imgButton {
-    display: ${(props) => (props.selected ? "block" : "none")};
-    position: absolute;
-    left: -5px;
-    bottom: -5px;
-    width: 16px;
-  }
-  :hover {
-    background: linear-gradient(
-      90deg,
-      rgba(1, 180, 230, 1) 22%,
-      rgba(50, 70, 140, 1) 100%
-    );
-    cursor: pointer;
-  }
-`;
 
 const DonProgressBarStyled = styled.div`
   flex: 1;
@@ -148,6 +116,7 @@ const DonProgressBarStyled = styled.div`
   border: 1px solid lightgray;
   height: 40px;
   border-radius: 40px;
+  margin-left: 30px;
   position: relative;
   .cercle {
     position: absolute;
@@ -173,6 +142,13 @@ const DonProgressBarStyled = styled.div`
     img {
       width: 14px;
     }
+  }
+  @media only screen and (max-width: 800px) {
+    flex: 0;
+    flex-direction: row;
+    height: 40px;
+    width: 100%;
+    background-color: green;
   }
 `;
 const DonProgressBar = ({ dons, totalDons }) => {

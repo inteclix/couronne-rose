@@ -19,24 +19,28 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
+import Button from "./components/Button";
 
 import giftBoxImg from "imgs/giftbox.png";
 import checkImg from "imgs/check.png";
+import tradImg from "imgs/trad.png";
 import couronneRoseImg from "imgs/couronne_rose.png";
 
 import Login from "Login";
 import Dons from "components/Dons";
 import Packs from "components/Packs";
 
+import Merci from "./components/Merci";
+
 //
 const firebaseConfig = {
-  apiKey: "AIzaSyDy6l1P5H1jB5narxoHXXIsxwpRuvmbtXk",
-  authDomain: "couronne-rose.firebaseapp.com",
-  projectId: "couronne-rose",
-  storageBucket: "couronne-rose.appspot.com",
-  messagingSenderId: "207432424251",
-  appId: "1:207432424251:web:ea8996616dfd8d84e0351e",
-  measurementId: "G-W4GJ3P1VVB",
+  apiKey: "AIzaSyCAJ0DP7Q2mMWPr3my-iDtc5swIBobn1W8",
+  authDomain: "condor-coronne-rose.firebaseapp.com",
+  projectId: "condor-coronne-rose",
+  storageBucket: "condor-coronne-rose.appspot.com",
+  messagingSenderId: "330472201590",
+  appId: "1:330472201590:web:07b759024a5bbd7f92ee57",
+  measurementId: "G-2H5WQT0HF2",
 };
 
 // Initialize Firebase
@@ -45,48 +49,65 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 const RootStyled = styled.div`
+  padding: 40px;
+  position: relative;
   .header {
+    flex-direction: row;
     .img-title {
       align-self: center;
-      width: 60%;
+      width: 200px;
+      padding: 10px;
       img {
       }
     }
-    .user {
-      border: 1px dashed lightgray;
-      justify-content: center;
-      padding: 3px;
+    .right {
+      justify-content: space-around;
+      padding: 10px;
+      padding-left: 20px;
+      border-left: 1px solid lightgray;
+      flex: 1;
       border-radius: 3px;
-      div {
-        margin: 2px;
+      flex-direction: column;
+      .select {
+        margin: 3px;
+        width: 100%;
+        label {
+          font-size: 18px;
+          font-weight: 700;
+          align-self: right;
+          padding: 3px;
+        }
+        select {
+          padding: 3px;
+          width: 200px;
+        }
+      }
+      .user {
+        div {
+          margin: 2px;
+          font-weight: 700;
+        }
+        flex-direction: row;
+        align-items: center;
+        img {
+          width: 42px;
+          height: 42px;
+        }
+        .logout {
+          font-size: 10px;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+      .text-title {
+        font-size: 20px;
         font-weight: 700;
-      }
-      flex-direction: row;
-      align-items: center;
-      img {
-        width: 42px;
-        height: 42px;
-      }
-      .logout {
-        font-size: 10px;
-        text-decoration: underline;
-        cursor: pointer;
       }
     }
   }
-  .select {
 
-    margin: 3px;
-    label{
-      font-size: 18px;
-      font-weight: 700;
-      align-self: center;
-      padding: 3px;
-    }
-    select {
-      align-self: center;
-      padding: 3px;
-    }
+  @media only screen and (max-width: 800px) {
+    padding: 10px;
   }
 `;
 export default () => {
@@ -96,6 +117,8 @@ export default () => {
   const [products, setProducts] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedProduct, setSelectedProduct] = React.useState(null);
+  const [showMerci, setShowMerci] = React.useState(false);
+
   const [packs, setPacks] = React.useState([
     {
       name: "Pack01",
@@ -194,6 +217,7 @@ export default () => {
     setDoc(doc(db, "couronnes", user.email), couronneDoc, { merge: true })
       .then(() => {
         //getUserDon();
+        setShowMerci(true);
       })
       .catch(() => {
         alert("error");
@@ -205,38 +229,51 @@ export default () => {
   }
 
   if (loadingSubmitedUserCouronne) {
-    // return <div>...loadingSubmitedUserCouronne</div>;
+    return (
+      <div style={{ alignItems: "center", justifyContent: "center" }}>
+        <img width="200px" src={couronneRoseImg} />
+      </div>
+    );
   }
 
   return (
     <RootStyled>
+      <Merci showMerci={showMerci} setShowMerci={setShowMerci} />
       <div className="header">
         <div className="img-title">
           <img src={couronneRoseImg} alt="img" />
         </div>
-        <div className="user">
-          <div>
-            <img src={user?.photoURL} />
-          </div>
-          <div>
-            <div>{user?.displayName}</div>
-            <div className="logout" onClick={signout}>
-              Déconnecté
+        <div className="right">
+          <div className="user">
+            <div>
+              <img src={user?.photoURL} />
+            </div>
+            <div>
+              <div>{user?.displayName}</div>
+              <div className="logout" onClick={signout}>
+                Déconnecté
+              </div>
             </div>
           </div>
+          <div className="select">
+            <select value={wilaya} onChange={(e) => setWilaya(e.target.value)}>
+              <option key={0} value={"0"}>
+                Selectionné votre wilaya
+              </option>
+              {wilayas.map((w) => (
+                <option value={w.code}>{w.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="text-title">
+            Choisissez le Produit qui vous souhaiter en faire don:
+          </div>
+        </div>
+        <div>
+          <img height={24} src={tradImg} />
         </div>
       </div>
-      <div className="select">
-        <label>Selectionné votre wilaya</label>
-        <select value={wilaya} onChange={(e) => setWilaya(e.target.value)}>
-          <option key={0} value={"0"}>
-            Selectionné votre wilaya
-          </option>
-          {wilayas.map((w) => (
-            <option value={w.code}>{w.name}</option>
-          ))}
-        </select>
-      </div>
+
       <Dons
         selectedProduct={selectedProduct}
         submitedUserCouronne={submitedUserCouronne}
@@ -256,7 +293,9 @@ export default () => {
       {/* <div>
         <pre>{JSON.stringify(user, null, 2)}</pre>
       </div> */}
-      <button onClick={() => submit()}>valider</button>
+      <Button style={{ width: 100, alignSelf: "end" }} onClick={() => submit()}>
+        valider
+      </Button>
       {/* <pre>{JSON.stringify(submitedUserCouronne, null, 2)}</pre> */}
     </RootStyled>
   );

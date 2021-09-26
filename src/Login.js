@@ -22,7 +22,7 @@ const RootStyled = styled.div`
     align-items: center;
     justify-content: center;
     .img-title {
-      width: 50%;
+      width: 200px;
     }
   }
   .buttons{

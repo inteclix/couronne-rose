@@ -1,4 +1,6 @@
 import React from "react";
+import Button from "./Button";
+import checkImg from "imgs/check.png";
 
 export default ({
   selectedPack,
@@ -11,7 +13,13 @@ export default ({
     // return <div>...loading</div>;
   }
   return (
-    <div style={{ flexDirection: "row" }}>
+    <div
+      style={{
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {packs.map((p, index) => (
         <Pack
           key={index}
@@ -27,15 +35,23 @@ export default ({
 
 const Pack = ({ selectedPack, submitedUserCouronne, pack, onChoosePack }) => {
   return (
-    <div style={{ padding: 5, border: "1px dashed black" }}>
-      <div>{selectedPack && selectedPack.name == pack.name && "Selected"}</div>
-      <div>{pack.name}</div>
-      <div>
-        {submitedUserCouronne &&
-          submitedUserCouronne.packName == pack.name &&
-          "Submited"}
-      </div>
-      <button onClick={() => onChoosePack(pack)}>choose pack</button>
+    <div
+      style={{
+        padding: 10,
+        borderRadius: 5,
+        border:
+          submitedUserCouronne?.packName == pack.name
+            ? "1px dashed green"
+            : "1px dashed lightgray",
+      }}
+    >
+      <Button
+        onClick={() => onChoosePack(pack)}
+        selected={selectedPack?.name == pack.name}
+      >
+        {pack.name}
+        <img className="imgButton" src={checkImg} />
+      </Button>
     </div>
   );
 };
