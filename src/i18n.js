@@ -18,6 +18,10 @@ const resources = {
       "selectionner un produit": "Sélectionner un produit",
       "pour participer à la tombola, choisissez votre cadeau":
         "Pour participer à la tombola, choisissez votre cadeau",
+      "Se deconnecter": "Se déconnecter",
+      "Email invalide!": "Email invalide!",
+      "Connectez-vous avec": "Connectez-vous avec",
+      "Merci pour votre participation": "Merci pour votre participation",
     },
   },
   ar: {
@@ -33,6 +37,10 @@ const resources = {
       "selectionner un produit": "اختر المنتوج الذي تريد التبرع به",
       "pour participer à la tombola, choisissez votre cadeau":
         "للمشاركة في السحب ، اختر هديتك",
+      "Se deconnecter": "تسجيل خروج",
+      "Email invalide!": "بريد إلكتروني خاطئ!",
+      "Connectez-vous avec": "تسجيل الدخول مع",
+      "Merci pour votre participation": "شكرا لمشاركتك",
     },
   },
 };

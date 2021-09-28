@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import bgImg from "imgs/bg.png";
+import { useTranslation } from "react-i18next";
 
 const MerciStyled = styled.div`
   display: ${(props) => (props.showMerci ? "block" : "none")};
@@ -47,11 +48,12 @@ const MerciStyled = styled.div`
 `;
 
 export default ({ setShowMerci, showMerci }) => {
+  const { t } = useTranslation();
   return (
     <MerciStyled showMerci={showMerci}>
       <div>
         <span onClick={() => setShowMerci(false)}>X</span>
-        Merci pour votre participation
+        {t("Merci pour votre participation")}
         <div
           style={{
             marginTop: 20,

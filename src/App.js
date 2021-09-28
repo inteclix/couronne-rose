@@ -41,13 +41,13 @@ import Merci from "./components/Merci";
 
 //
 const firebaseConfig = {
-  apiKey: "AIzaSyCAJ0DP7Q2mMWPr3my-iDtc5swIBobn1W8",
-  authDomain: "condor-coronne-rose.web.app",
-  projectId: "condor-coronne-rose",
-  storageBucket: "condor-coronne-rose.appspot.com",
-  messagingSenderId: "330472201590",
-  appId: "1:330472201590:web:07b759024a5bbd7f92ee57",
-  measurementId: "G-2H5WQT0HF2",
+  apiKey: "AIzaSyAv_SzresZvO1N0im0R7frVn17J0WxYnW8",
+  authDomain: "couronne-rose-condor.firebaseapp.com",
+  projectId: "couronne-rose-condor",
+  storageBucket: "couronne-rose-condor.appspot.com",
+  messagingSenderId: "806970367660",
+  appId: "1:806970367660:web:2b27a111084484cce04909",
+  measurementId: "G-76GPBCLZMH",
 };
 
 // Initialize Firebase
@@ -239,10 +239,16 @@ export default () => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        if (!user.providerData[0].email) {
+          const auth = getAuth();
+          auth.signOut();
+          return alert(t("Email invalide!"));
+        }
         setUser(user);
       } else {
         setUser(null);
       }
+      window.user = user;
     });
   }, []);
 
@@ -337,7 +343,7 @@ export default () => {
             <div>
               <div>{user?.displayName}</div>
               <div className="logout" onClick={signout}>
-                Déconnecté
+                {t("Se deconnecter")}
               </div>
             </div>
           </div>
@@ -373,7 +379,7 @@ export default () => {
           <div
             className="excel"
             onClick={() => {
-              alert("Download excel file");
+              // alert("Download excel file");
             }}
           >
             <img height={24} src={excelImg} />
@@ -421,7 +427,7 @@ const wilayas = [
   { name: "Adrar", name_ar: "ادرار", code: 1 },
   { name: "Chlef", name_ar: "الشلف", code: 2 },
   { name: "Laghouat", name_ar: "الأغواط", code: 3 },
-  { name: "Oum El Bouaghi", name_ar: "أم_ar البواقي", code: 4 },
+  { name: "Oum El Bouaghi", name_ar: "أم البواقي", code: 4 },
   { name: "Batna", name_ar: "باتنة", code: 5 },
   { name: "Béjaïa", name_ar: "بجاية", code: 6 },
   { name: "Biskra", name_ar: "بسكرة", code: 7 },
@@ -432,14 +438,14 @@ const wilayas = [
   { name: "Tébessa", name_ar: "تبسة", code: 12 },
   { name: "Tlemcen", name_ar: "تلمسان", code: 13 },
   { name: "Tiaret", name_ar: "تيارت", code: 14 },
-  { name: "Tizi Ouzou", name_ar: "تيزي_ar وزو", code: 15 },
+  { name: "Tizi Ouzou", name_ar: "تيزي وزو", code: 15 },
   { name: "Alger", name_ar: "للجزائر", code: 16 },
   { name: "Djelfa", name_ar: "الجلفة", code: 17 },
   { name: "Jijel", name_ar: "جيجل", code: 18 },
   { name: "Sétif", name_ar: "سطيف", code: 19 },
   { name: "Saïda", name_ar: "سعيدة", code: 20 },
   { name: "Skikda", name_ar: "سكيكدة", code: 21 },
-  { name: "Sidi Bel Abbès", name_ar: "سيدي_ar بلعباس", code: 22 },
+  { name: "Sidi Bel Abbès", name_ar: "سيدي بلعباس", code: 22 },
   { name: "Annaba", name_ar: "عنابة", code: 23 },
   { name: "Guelma", name_ar: "قالمة", code: 24 },
   { name: "Constantine", name_ar: "قسنطينة", code: 25 },
@@ -451,27 +457,27 @@ const wilayas = [
   { name: "Oran", name_ar: "وهران", code: 31 },
   { name: "El Bayadh", name_ar: "البيض", code: 32 },
   { name: "Illizi", name_ar: "اليزي", code: 33 },
-  { name: "Bordj Bou Arreridj", name_ar: "برج_ar بوعريريج", code: 34 },
+  { name: "Bordj Bou Arreridj", name_ar: "برج بوعريريج", code: 34 },
   { name: "Boumerdès", name_ar: "بومرداس", code: 35 },
   { name: "El Tarf", name_ar: "الطارف", code: 36 },
   { name: "Tindouf", name_ar: "تيندوف", code: 37 },
   { name: "Tissemsilt", name_ar: "تيسيمسيلت", code: 38 },
   { name: "El Oued", name_ar: "الواد", code: 39 },
   { name: "Khenchela", name_ar: "خنشلة", code: 40 },
-  { name: "Souk Ahras", name_ar: "سوق_ar أهراس", code: 41 },
+  { name: "Souk Ahras", name_ar: "سوق أهراس", code: 41 },
   { name: "Tipaza", name_ar: "تيبازة", code: 42 },
   { name: "Mila", name_ar: "ميلة", code: 43 },
-  { name: "Aïn Defla", name_ar: "عين_ar الدفلة", code: 44 },
+  { name: "Aïn Defla", name_ar: "عين الدفلة", code: 44 },
   { name: "Naâma", name_ar: "النعامة", code: 45 },
-  { name: "Aïn Témouchent", name_ar: "عين_ar تيموشنت", code: 46 },
+  { name: "Aïn Témouchent", name_ar: "عين تيموشنت", code: 46 },
   { name: "Ghardaïa", name_ar: "غرداية", code: 47 },
   { name: "Relizane", name_ar: "غيليزان", code: 48 },
   { name: "Timimoun", name_ar: "تيميمون", code: 49 },
-  { name: "Bordj Badji Mokhtar", name_ar: "برج_ar باجي مختار", code: 50 },
-  { name: "Ouled Djellal", name_ar: "أولاد_ar جلال", code: 51 },
-  { name: "Béni Abbès", name_ar: "بني_ar عباس", code: 52 },
-  { name: "In Salah", name_ar: "عين_ar صالح", code: 53 },
-  { name: "In Guezzam", name_ar: "عين_ar قزم", code: 54 },
+  { name: "Bordj Badji Mokhtar", name_ar: "برج باجي مختار", code: 50 },
+  { name: "Ouled Djellal", name_ar: "أولاد جلال", code: 51 },
+  { name: "Béni Abbès", name_ar: "بني عباس", code: 52 },
+  { name: "In Salah", name_ar: "عين صالح", code: 53 },
+  { name: "In Guezzam", name_ar: "عين قزم", code: 54 },
   { name: "Touggourt", name_ar: "توقورت", code: 55 },
   { name: "Djanet", name_ar: "جانت", code: 56 },
   { name: "El M'Ghair", name_ar: "المغير", code: 57 },

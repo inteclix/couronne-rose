@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "condor-coronne-rose"
-  }
+    "default": "condor-coronne-rose",
+    "prod": "couronne-rose-condor"
+  },
+  "targets": {}
 }

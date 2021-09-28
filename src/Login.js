@@ -11,11 +11,22 @@ import logoArImg from "imgs/logo_ar.png";
 import logoFrImg from "imgs/logo_fr.png";
 import googleImg from "imgs/google.png";
 import facebookImg from "imgs/facebook.png";
+import tradImg from "imgs/trad.png";
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
 const RootStyled = styled.div`
+  .lang {
+    position: absolute;
+    left: ${(props) => (props.lang == "ar" ? "10px" : "")};
+    right: ${(props) => (props.lang != "ar" ? "10px" : "")};
+    top: 10px;
+    cursor: pointer;
+    :hover {
+      filter: brightness(1.1);
+    }
+  }
   background: rgb(208, 207, 212);
   background: linear-gradient(
     0deg,
@@ -54,7 +65,7 @@ const RootStyled = styled.div`
     }
   }
   @media only screen and (max-width: 800px) {
-    .buttons{
+    .buttons {
       flex-direction: column;
     }
     .title {
@@ -100,7 +111,7 @@ export default () => {
 
   const loginWithFacebbok = () => {
     const auth = getAuth();
-    facebookProvider.addScope('email');
+    facebookProvider.addScope("email");
     signInWithPopup(auth, facebookProvider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -134,14 +145,22 @@ export default () => {
       <div>
         <div>
           <div className="buttons">
-            <LoginWithGoogleButton onClick={loginWithGoogle}>
-              Login with google
-            </LoginWithGoogleButton>
-            <LoginWithFacebookButton onClick={loginWithFacebbok}>
-              Login with Facebook
-            </LoginWithFacebookButton>
+            <LoginWithGoogleButton t={t} onClick={loginWithGoogle} />
+            <LoginWithFacebookButton t={t} onClick={loginWithFacebbok} />
           </div>
         </div>
+      </div>
+      <div
+        className="lang"
+        onClick={() => {
+          if (lang == "ar") {
+            setLang("en");
+          } else {
+            setLang("ar");
+          }
+        }}
+      >
+        <img height={24} src={tradImg} />
       </div>
     </RootStyled>
   );
@@ -171,12 +190,12 @@ const StyledLoginWithGoogle = styled.div`
     background-color: #2767d0;
   }
 `;
-export const LoginWithGoogleButton = ({ onClick }) => (
+export const LoginWithGoogleButton = ({t, onClick }) => (
   <StyledLoginWithGoogle onClick={onClick}>
     <div className="img">
       <img width={24} height={24} src={googleImg} />
     </div>
-    <div>Connect avec Google</div>
+    <div>{t("Connectez-vous avec")}</div>
   </StyledLoginWithGoogle>
 );
 
@@ -201,11 +220,11 @@ const StyledLoginWithFacebook = styled.div`
     background-color: #1f4492;
   }
 `;
-export const LoginWithFacebookButton = ({ onClick }) => (
+export const LoginWithFacebookButton = ({t, onClick }) => (
   <StyledLoginWithFacebook onClick={onClick}>
     <div className="img">
       <img width={24} height={24} src={facebookImg} />
     </div>
-    <div>Connect avec Facebook</div>
+    <div>{t("Connectez-vous avec")}</div>
   </StyledLoginWithFacebook>
 );
