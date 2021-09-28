@@ -1,10 +1,19 @@
+import React from "react";
 import styled from "styled-components";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import couronneRoseImg from "imgs/couronne_rose.png";
-import googleImg from "imgs/google.png"
-import facebookImg from "imgs/facebook.png"
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+} from "firebase/auth";
+import { useTranslation } from "react-i18next";
+import logoArImg from "imgs/logo_ar.png";
+import logoFrImg from "imgs/logo_fr.png";
+import googleImg from "imgs/google.png";
+import facebookImg from "imgs/facebook.png";
 
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 
 const RootStyled = styled.div`
   background: rgb(208, 207, 212);
@@ -25,38 +34,49 @@ const RootStyled = styled.div`
       width: 200px;
     }
   }
-  .buttons{
+  .buttons {
     margin-top: 20px;
     flex-direction: row;
     align-self: center;
   }
-  .form{
+  .form {
     max-width: 320px;
     align-self: center;
-    .input{
-      input{
+    .input {
+      input {
         padding: 10px;
         margin: 5px;
         border: 1px dashed lightgray;
       }
-      input::focus{
+      input::focus {
         border: 2px dashed black;
       }
     }
   }
   @media only screen and (max-width: 800px) {
+    .buttons{
+      flex-direction: column;
+    }
     .title {
       margin-top: 10px;
-    .img-title {
-      width: 90%;
-    }
+      .img-title {
+        width: 90%;
+      }
     }
   }
 `;
 export default () => {
+  const { t, i18n } = useTranslation();
+  const [lang, setLang] = React.useState("en");
+
+  React.useEffect(() => {
+    i18n.changeLanguage(lang);
+  }, [lang]);
+
   const loginWithGoogle = () => {
     const auth = getAuth();
-    signInWithPopup(auth, provider)
+    googleProvider.addScope("email");
+    signInWithPopup(auth, googleProvider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -65,37 +85,67 @@ export default () => {
         const user = result.user;
         //setUser(user)
         // ...
-      }).catch((error) => {
+      })
+      .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.email;
+        // const email = error.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
-  }
+  };
 
-  const loginWithFacebbok = ()=>{
-
-  }
+  const loginWithFacebbok = () => {
+    const auth = getAuth();
+    facebookProvider.addScope('email');
+    signInWithPopup(auth, facebookProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        //setUser(user)
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        // const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
   return (
     <RootStyled>
       <div className="title">
-        <img className="img-title" src={couronneRoseImg} alt="img" />
+        <img
+          className="img-title"
+          src={lang == "ar" ? logoArImg : logoFrImg}
+          alt="img"
+        />
       </div>
       <div>
         <div>
           <div className="buttons">
-            <LoginWithGoogleButton onClick={loginWithGoogle}>Login with google</LoginWithGoogleButton>
-            {/* <LoginWithFacebookButton onClick={loginWithFacebbok}>Login with Facebook</LoginWithFacebookButton> */}
+            <LoginWithGoogleButton onClick={loginWithGoogle}>
+              Login with google
+            </LoginWithGoogleButton>
+            <LoginWithFacebookButton onClick={loginWithFacebbok}>
+              Login with Facebook
+            </LoginWithFacebookButton>
           </div>
         </div>
       </div>
     </RootStyled>
-  )
-}
+  );
+};
 
 const StyledLoginWithGoogle = styled.div`
   margin: 5px;
@@ -112,22 +162,23 @@ const StyledLoginWithGoogle = styled.div`
   font-size: 26;
   font-weight: 700;
   cursor: pointer;
-  img{
+  img {
     margin-right: 8px;
     background-color: white;
     padding: 5px;
   }
-  :hover{
+  :hover {
     background-color: #2767d0;
-
   }
-`
-export const LoginWithGoogleButton = ({onClick}) => (
+`;
+export const LoginWithGoogleButton = ({ onClick }) => (
   <StyledLoginWithGoogle onClick={onClick}>
-    <div className="img"><img width={24} height={24} src={googleImg} /></div>
+    <div className="img">
+      <img width={24} height={24} src={googleImg} />
+    </div>
     <div>Connect avec Google</div>
   </StyledLoginWithGoogle>
-)
+);
 
 const StyledLoginWithFacebook = styled.div`
   margin: 5px;
@@ -141,19 +192,20 @@ const StyledLoginWithFacebook = styled.div`
   font-size: 26;
   font-weight: 700;
   cursor: pointer;
-  img{
+  img {
     margin-right: 5px;
     background-color: white;
     padding: 8px;
   }
-  :hover{
+  :hover {
     background-color: #1f4492;
-
   }
-`
-export const LoginWithFacebookButton = ({onClick}) => (
+`;
+export const LoginWithFacebookButton = ({ onClick }) => (
   <StyledLoginWithFacebook onClick={onClick}>
-    <div className="img"><img width={24} height={24} src={facebookImg} /></div>
+    <div className="img">
+      <img width={24} height={24} src={facebookImg} />
+    </div>
     <div>Connect avec Facebook</div>
   </StyledLoginWithFacebook>
-)
+);

@@ -1,24 +1,31 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-import product01 from "imgs/product01.png";
-import product02 from "imgs/product02.png";
-import product03 from "imgs/product03.png";
+import product1 from "imgs/product1.png";
+import product2 from "imgs/product2.png";
+import product3 from "imgs/product3.png";
 import giftBoxImg from "imgs/giftbox.png";
 import checkImg from "imgs/check.png";
 import cercleImg from "imgs/cercle.png";
 
-import Button from "./Button"
+import Button from "./Button";
 
 const imgs = {
-  product01,
-  product02,
-  product03,
+  product1,
+  product2,
+  product3,
 };
 
 const DonsStyled = styled.div`
-  padding: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 10px;
+  @media only screen and (max-width: 800px) {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
 `;
 export default ({
   selectedProduct,
@@ -27,7 +34,7 @@ export default ({
   products,
   onChooseProduct,
 }) => {
-  let totalDons = 10000
+  let totalDons = 10000;
   if (loading) {
     // return <div>...loading</div>;
   }
@@ -56,11 +63,16 @@ const DonStyled = styled.div`
     position: relative;
     width: 100px;
     height: 100px;
+    img {
+      width: 95px;
+      height: 95px;
+    }
     .submited {
       display: ${(props) => (props.submited ? "block" : "none")};
       position: absolute;
       right: 10px;
       bottom: 0px;
+
       img {
         width: 24px;
         height: 24px;
@@ -69,9 +81,12 @@ const DonStyled = styled.div`
   }
   @media only screen and (max-width: 800px) {
     flex-direction: column;
-    width: 100%;
-    background-color: red;
-    height: 320px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid lightgray;
+    margin-bottom: 10px;
+    .button {
+      margin-top: 30px;
+    }
   }
 `;
 
@@ -82,6 +97,7 @@ const Don = ({
   totalDons,
   onChooseProduct,
 }) => {
+  const { t } = useTranslation();
   return (
     <DonStyled
       selected={selectedProduct && selectedProduct.name == product.name}
@@ -90,31 +106,33 @@ const Don = ({
       }
     >
       <div className="product">
-        <img src={imgs[product.name]} />
+        <img src={imgs[product.img]} />
         <div className="submited">
           <img src={checkImg} />
         </div>
       </div>
       <DonProgressBar dons={product.dons} totalDons={totalDons} />
-      <Button
-        onClick={() => product.dons !== 10000 && onChooseProduct(product)}
-        selected={selectedProduct && selectedProduct.name == product.name}
-        disabled={product.dons == 10000}
-      >
-        Je Fais un Don <img className="imgButton" src={checkImg} />
-      </Button>
+      <div className="button">
+        <Button
+          onClick={() => product.dons !== 10000 && onChooseProduct(product)}
+          selected={selectedProduct && selectedProduct.name == product.name}
+          disabled={product.dons >= 10000}
+        >
+          {t("Je Fais un Don")} <img className="imgButton" src={checkImg} />
+        </Button>
+      </div>
     </DonStyled>
   );
 };
 
-
 const DonProgressBarStyled = styled.div`
+  direction: ltr;
   flex: 1;
   background-color: #dde1e4;
   box-shadow: inset 2px 3px 4px gray;
   padding: 2px;
   border: 1px solid lightgray;
-  height: 40px;
+  min-height: 40px;
   border-radius: 40px;
   margin-left: 30px;
   position: relative;
@@ -144,22 +162,22 @@ const DonProgressBarStyled = styled.div`
     }
   }
   @media only screen and (max-width: 800px) {
-    flex: 0;
     flex-direction: row;
-    height: 40px;
     width: 100%;
-    background-color: green;
+    margin-left: 0px;
   }
 `;
 const DonProgressBar = ({ dons, totalDons }) => {
+  const { t, i18n } = useTranslation();
   let width = (dons / totalDons) * 100;
   return (
     <DonProgressBarStyled>
       <motion.div
         className="cercle"
-        animate={{ left: width == 100 ? `calc(${width}% - 40px)` : `${width}%` }}
+        animate={{
+          left: width == 100 ? `calc(${width}% - 40px)` : `${width}%`,
+        }}
         transition={{ duration: 1 }}
-
       >
         <img src={cercleImg} alt="img" />
       </motion.div>
@@ -167,7 +185,7 @@ const DonProgressBar = ({ dons, totalDons }) => {
         {dons} / {totalDons}
       </span>
       <span className="info">
-        10 Vote = {"  "}
+        1000 {t("Vote")} = {"  "}
         <img src={giftBoxImg} />
       </span>
     </DonProgressBarStyled>

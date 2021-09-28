@@ -1,12 +1,13 @@
-import React from "react"
-import styled from "styled-components"
+import React from "react";
+import styled from "styled-components";
+import bgImg from "imgs/bg.png";
 
 const MerciStyled = styled.div`
-  display: ${props => props.showMerci ? "block" : "none"};
+  display: ${(props) => (props.showMerci ? "block" : "none")};
   position: absolute;
   top: calc(50% - 160px);
-  left: calc(50% - 130px);
-  width: 260px;
+  left: calc(50% - 200px);
+  width: 400px;
   height: 280px;
   border: 2px dashed lightgray;
   z-index: 1000;
@@ -18,9 +19,9 @@ const MerciStyled = styled.div`
   text-align: center;
   font-size: 20px;
   font-weight: 700;
-  span{
+  span {
     position: absolute;
-    background-color:lightgray;
+    background-color: lightgray;
     width: 24px;
     height: 24px;
     border-radius: 12px;
@@ -32,11 +33,18 @@ const MerciStyled = styled.div`
     line-height: 24px;
     cursor: pointer;
     font-weight: 700;
-    :hover{
+    :hover {
       color: red;
     }
   }
-`
+  @media only screen and (max-width: 800px) {
+    border: none;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+  }
+`;
 
 export default ({ setShowMerci, showMerci }) => {
   return (
@@ -44,7 +52,16 @@ export default ({ setShowMerci, showMerci }) => {
       <div>
         <span onClick={() => setShowMerci(false)}>X</span>
         Merci pour votre participation
+        <div
+          style={{
+            marginTop: 20,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img width={200} height={200} src={bgImg} />
+        </div>
       </div>
     </MerciStyled>
-  )
-}
+  );
+};
