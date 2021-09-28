@@ -376,14 +376,13 @@ export default () => {
           <img height={24} src={tradImg} />
         </div>
         {user?.email == "condor.coronne@gmail.com" && (
-          <div
+          <a
             className="excel"
-            onClick={() => {
-              // alert("Download excel file");
-            }}
+            target="_blank"
+            href="https://couronne.inteclix.com"
           >
             <img height={24} src={excelImg} />
-          </div>
+          </a>
         )}
       </div>
 
